@@ -1,0 +1,134 @@
+import { Dialog as BaseDialog } from '@base-ui-components/react';
+import { XIcon } from 'lucide-react';
+import * as React from 'react';
+
+import { cn } from '@/lib/utils';
+
+function Dialog({ ...props }: React.ComponentProps<typeof BaseDialog.Root>) {
+  return <BaseDialog.Root data-slot="dialog" {...props} />;
+}
+
+function DialogPortal({ ...props }: React.ComponentProps<typeof BaseDialog.Portal>) {
+  return <BaseDialog.Portal data-slot="dialog-portal" {...props} />;
+}
+
+function DialogTrigger({ ...props }: React.ComponentProps<typeof BaseDialog.Trigger>) {
+  return <BaseDialog.Trigger data-slot="dialog-trigger" {...props} />;
+}
+
+function DialogClose({ ...props }: React.ComponentProps<typeof BaseDialog.Close>) {
+  return <BaseDialog.Close data-slot="dialog-close" {...props} />;
+}
+
+function DialogOverlay({ className, ...props }: React.ComponentProps<typeof BaseDialog.Backdrop>) {
+  return (
+    <BaseDialog.Backdrop
+      data-slot="dialog-overlay"
+      className={cn(
+        'fixed inset-0 bg-black/50 transition-all duration-200 [&[data-ending-style]]:opacity-0 [&[data-starting-style]]:opacity-0',
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function DialogContent({
+  className,
+  children,
+  showCloseButton = true,
+  ...props
+}: React.ComponentProps<typeof BaseDialog.Popup> & {
+  showCloseButton?: boolean;
+}) {
+  return (
+    <DialogPortal data-slot="dialog-portal">
+      <DialogOverlay />
+      <BaseDialog.Popup
+        data-slot="dialog-content"
+        className={cn(
+          'bg-popover text-popover-foreground fixed z-50 flex flex-col w-full max-h-full',
+          'rounded-lg border shadow-lg duration-200 outline-none sm:w-4xl sm:scale-[calc(1-0.1*var(--nested-dialogs))]',
+          'fixed bottom-0 w-full sm:top-[50%] sm:bottom-auto sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%]',
+          'duration-200',
+          'data-[starting-style]:translate-y-full data-[starting-style]:opacity-0',
+          'data-[ending-style]:translate-y-full data-[ending-style]:opacity-0',
+          'data-[starting-style]:sm:translate-y-[-50%] data-[starting-style]:sm:scale-95',
+          'data-[ending-style]:sm:translate-y-[-50%] data-[ending-style]:sm:scale-95',
+          // Nested dialogs
+          'data-[nested-dialog-open]:after:absolute data-[nested-dialog-open]:after:inset-0 data-[nested-dialog-open]:after:rounded-[inherit] data-[nested-dialog-open]:after:bg-black/5',
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <DialogClose className="text-muted-foreground absolute top-4 right-4 rounded-xs opacity-50 transition-all hover:opacity-100 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+            <XIcon />
+            <span className="sr-only">Close</span>
+          </DialogClose>
+        )}
+      </BaseDialog.Popup>
+    </DialogPortal>
+  );
+}
+
+function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="dialog-header"
+      className={cn('flex flex-col gap-2 px-6 py-4 text-center sm:text-left', className)}
+      {...props}
+    />
+  );
+}
+
+function DialogBody({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div {...props} data-ui="dialog-body" className={cn('flex flex-1 flex-col overflow-auto px-6 py-4', className)} />
+  );
+}
+
+function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="dialog-footer"
+      className={cn('flex flex-col-reverse px-6 py-4 gap-2 sm:flex-row sm:justify-end', className)}
+      {...props}
+    />
+  );
+}
+
+function DialogTitle({ className, ...props }: React.ComponentProps<typeof BaseDialog.Title>) {
+  return (
+    <BaseDialog.Title
+      data-slot="dialog-title"
+      className={cn('text-lg leading-none font-semibold', className)}
+      {...props}
+    />
+  );
+}
+
+function DialogDescription({ className, ...props }: React.ComponentProps<typeof BaseDialog.Description>) {
+  return (
+    <BaseDialog.Description
+      data-slot="dialog-description"
+      className={cn('text-muted-foreground text-sm', className)}
+      {...props}
+    />
+  );
+}
+
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogBody,
+};
