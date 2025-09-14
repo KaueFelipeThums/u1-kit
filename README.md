@@ -1,7 +1,3 @@
-Aqui está um modelo de **README profissional e estiloso** para a sua lib **U1 Kit**. Ele é bem estruturado, moderno e com exemplos claros para atrair desenvolvedores que querem usar sua biblioteca.
-
----
-
 # 🌟 U1 Kit
 
 Uma biblioteca de **componentes modernos** construída com **Tailwind CSS v4** e baseada na **Base UI**, projetada para criar interfaces rápidas, acessíveis e consistentes.
